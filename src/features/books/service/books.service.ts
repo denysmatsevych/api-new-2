@@ -50,7 +50,9 @@ export class BookService {
     });
   }
 
-  public async getBookReviews() {
-    return await this.httpClient.get<BookReviewResponse>("/reviews.json");
+  public async getBookReviews(): Promise<BookReviewResponse> {
+    return await this.httpClient.get<BookReviewResponse>(
+      "/reviews.json?isbn=9780307476463"
+    );
   }
 }
