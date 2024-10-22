@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/features/books/components/bookreviews.tsx","./src/features/books/service/books.service.ts","./src/features/todo/components/todocomponent.tsx","./src/features/todo/service/todo.service.ts","./src/utils/http/httpclient.ts"],"version":"5.6.3"}
