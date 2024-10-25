@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import { BookReview, BookService } from '../service/books.service';
+import { useEffect, useState } from "react";
 
-const BookReviews = () => {
+import { BookReview, BookService } from "../service/books.service";
+
+const BookReviewsPage = () => {
   const [reviews, setReviews] = useState<BookReview[]>([]);
 
   useEffect(() => {
@@ -18,7 +19,7 @@ const BookReviews = () => {
       } catch (error) {
         console.error("Failed to fetch reviews", error);
       }
-    }
+    };
 
     // return () => {
     //   // abortController.abort();
@@ -41,7 +42,7 @@ const BookReviews = () => {
         ))}
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export default BookReviews
+export default BookReviewsPage;
