@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BookReview, BookService } from '../service/books.service';
 
-const BookReviews = () => {
+const BookReviewsPage = () => {
   const [reviews, setReviews] = useState<BookReview[]>([]);
 
   useEffect(() => {
@@ -44,4 +44,4 @@ const BookReviews = () => {
   )
 }
 
-export default BookReviews
+export default BookReviewsPage
