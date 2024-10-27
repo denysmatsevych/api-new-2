@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 
 import { Todo, TodoService } from '../service/todo.service';
 
-const TodoComponent = () => {
+const TodoPage = () => {
   const [todo, setTodo] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -71,4 +71,4 @@ const TodoComponent = () => {
   )
 }
 
-export default TodoComponent
+export default TodoPage
