@@ -1,6 +1,6 @@
 import TodoTableContainer from "./table/TodoTableContainer";
 
-const TodoComponent = () => {
+const TodoPage = () => {
   return (
     <div>
       <h1>Todos List</h1>
@@ -9,4 +9,4 @@ const TodoComponent = () => {
   );
 };
 
-export default TodoComponent;
+export default TodoPage;
