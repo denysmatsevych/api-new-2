@@ -39,6 +39,9 @@ const TodoTable = ({
             <td>
               {editTodo?.id === todo.id ? (
                 <input
+                  style={{
+                    width: "100%",
+                  }}
                   type="text"
                   value={editTodo.todo}
                   onChange={(event) => onTodoTitleChange(event, todo.id)}
