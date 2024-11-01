@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const users = [
+export interface User {
+  userName: string;
+  password: string;
+  role: string;
+}
+
+const users: User[] = [
   {
     userName: "admin",
     password: "admin",
@@ -32,7 +38,7 @@ const LoginPage = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event: HTMLFormElement) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // API call to authenticate user
 

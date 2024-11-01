@@ -17,7 +17,7 @@ const AppRouter = () => {
         <Route
           path="/"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["admin", "user"]}>
               <Layout />
             </ProtectedRoute>
           }
@@ -25,7 +25,7 @@ const AppRouter = () => {
           <Route
             index
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["admin", "user"]}>
                 <HomePage />
               </ProtectedRoute>
             }
@@ -33,7 +33,7 @@ const AppRouter = () => {
           <Route
             path="/todo"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["admin", "user"]}>
                 <TodoPage />
               </ProtectedRoute>
             }
@@ -41,7 +41,7 @@ const AppRouter = () => {
           <Route
             path="/books"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["admin", "user"]}>
                 <BookReviewsPage />
               </ProtectedRoute>
             }
@@ -49,7 +49,7 @@ const AppRouter = () => {
           <Route
             path="/users"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["admin"]}>
                 <UsersPage />
               </ProtectedRoute>
             }
