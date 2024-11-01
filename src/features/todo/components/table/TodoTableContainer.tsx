@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { AxiosError } from "axios";
+import { AxiosError } from 'axios';
 
-import { Todo, TodoService } from "../../service/todo.service";
-import TodoTable from "./TodoTable";
+import ErrorMessage from '../../../../components/layout/ErrorMessage';
+import Loading from '../../../../components/layout/Loading';
+import { Todo, TodoService } from '../../service/todo.service';
+import TodoTable from './TodoTable';
 
 const TodoTableContainer = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
@@ -25,7 +27,7 @@ const TodoTableContainer = () => {
         setLoading(true);
         setError(null);
 
-        const todos = await todoService.getAllTodos();
+        const todos = await todoService.getPaginatedTodos(1000, 0);
 
         if (isMounted) {
           setTodoList(todos.todos);
@@ -114,8 +116,8 @@ const TodoTableContainer = () => {
 
   return (
     <div>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
+      {loading && <Loading />}
+      {error && <ErrorMessage error={error} />}
       <TodoTable
         todoList={todoList}
         editTodo={editTodo}

@@ -1,4 +1,3 @@
-import { ChangeEvent } from "react";
 import { Todo } from "../../service/todo.service";
 
 interface TodoTableProps {

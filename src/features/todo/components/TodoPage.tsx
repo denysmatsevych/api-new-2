@@ -1,9 +1,10 @@
+import PageTitle from "../../../components/layout/PageTitle";
 import TodoTableContainer from "./table/TodoTableContainer";
 
 const TodoPage = () => {
   return (
     <div>
-      <h1>Todos List</h1>
+      <PageTitle title="Todo List" />
       <TodoTableContainer />
     </div>
   );
