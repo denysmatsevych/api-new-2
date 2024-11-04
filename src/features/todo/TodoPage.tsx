@@ -1,5 +1,5 @@
-import PageTitle from "../../../components/layout/PageTitle";
-import TodoTableContainer from "./table/TodoTableContainer";
+import PageTitle from "../../components/layout/PageTitle";
+import TodoTableContainer from "./components/table/TodoTableContainer";
 
 const TodoPage = () => {
   return (

@@ -1,6 +1,7 @@
 import { ChangeEvent } from "react";
 
 import { Todo } from "../../service/todo.service";
+import TodoTitleInput from "../TodoTitleInput";
 
 interface TodoTableProps {
   todoList: Todo[];
@@ -38,14 +39,7 @@ const TodoTable = ({
             <td>{todo.id}</td>
             <td>
               {editTodo?.id === todo.id ? (
-                <input
-                  style={{
-                    width: "100%",
-                  }}
-                  type="text"
-                  value={editTodo.todo}
-                  onChange={(event) => onTodoTitleChange(event, todo.id)}
-                />
+                <TodoTitleInput editTodo={editTodo} onTodoTitleChange={onTodoTitleChange} />
               ) : (
                 todo.todo
               )}
