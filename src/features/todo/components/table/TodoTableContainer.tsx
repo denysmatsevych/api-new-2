@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { AxiosError } from 'axios';
 
 import ErrorMessage from '../../../../components/layout/ErrorMessage';
 import Loading from '../../../../components/layout/Loading';
+import { useRenderCount } from '../../../../hooks/useRenderCount';
 import { Todo, TodoService } from '../../service/todo.service';
 import TodoTable from './TodoTable';
 
 const TodoTableContainer = () => {
+  const renderCount = useRenderCount();
+
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const [editTodo, setEditTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -47,37 +48,40 @@ const TodoTableContainer = () => {
     };
   }, []);
 
-  const handleTodoItemDelete = async (id: number) => {
+  const memoizedHandleTodoItemDeleteCallback = useCallback(
+    async (id: number) => {
+      try {
+        setLoading(true);
+
+        await new TodoService().deleteTodoById(id);
+
+        setTodoList((prev) => prev.filter((todo) => todo.id !== id));
+
+        setLoading(false);
+      } catch (error) {
+        setError((error as AxiosError).message);
+        setLoading(false);
+      }
+    },
+    [],
+  );
+
+  const memozedHandleSaveTodoButtonClick = useCallback(async (newTitle: string, id: number) => {
     try {
-      setLoading(true);
+      // setLoading(true);
 
-      await new TodoService().deleteTodoById(id);
-
-      setTodoList((prev) => prev.filter((todo) => todo.id !== id));
-
-      setLoading(false);
-    } catch (error) {
-      setError((error as AxiosError).message);
-      setLoading(false);
-    }
-  };
-
-  const handleSaveTodoButtonClick = async () => {
-    try {
-      setLoading(true);
-
-      if (!editTodo) {
+      if (!newTitle) {
         return;
       }
 
-      await new TodoService().updateTodo(editTodo);
+      // await new TodoService().updateTodo(editTodo);
 
       setTodoList((prev) =>
         prev.map((todo) => {
-          if (todo.id === editTodo.id) {
+          if (todo.id === id) {
             return {
               ...todo,
-              todo: editTodo.todo,
+              todo: newTitle,
             };
           }
 
@@ -87,45 +91,17 @@ const TodoTableContainer = () => {
     } catch (error) {
       setError((error as AxiosError).message);
     }
-  };
-
-  const handleEditButtonClick = (row: Todo) => {
-    setEditTodo(row);
-  };
-
-  const handleTodoTitleChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
-    setEditTodo((prev) => {
-      if (!prev) {
-        return prev;
-      }
-
-      if (prev.id !== id) {
-        return prev;
-      }
-
-      return {
-        ...prev,
-        todo: event.target.value,
-      };
-    });
-  };
-
-  const handleCancelEditTodo = () => {
-    setEditTodo(null);
-  };
+  }, []);
 
   return (
     <div>
+      <h5>TodoTableContainer render count: {renderCount}</h5>
       {loading && <Loading />}
       {error && <ErrorMessage error={error} />}
       <TodoTable
         todoList={todoList}
-        editTodo={editTodo}
-        onTodoItemDelete={handleTodoItemDelete}
-        onEditButtonClick={handleEditButtonClick}
-        onSaveTodoButtonClick={handleSaveTodoButtonClick}
-        onTodoTitleChange={handleTodoTitleChange}
-        onCancelEditTodo={handleCancelEditTodo}
+        onTodoItemDelete={memoizedHandleTodoItemDeleteCallback}
+        onSaveTodoButtonClick={memozedHandleSaveTodoButtonClick}
       />
     </div>
   );
