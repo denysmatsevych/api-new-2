@@ -36,6 +36,7 @@ const TodoTableRowComponent = ({
     [],
   );
 
+  // TODO: fix saving new title to todo item
   const memoizedSaveTodoButtonClickCallback = useCallback(
     () => {
       onSaveTodoButtonClick(todoTitle, todo.id);
