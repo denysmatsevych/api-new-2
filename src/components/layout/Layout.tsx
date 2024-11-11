@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
+import { useRenderCount } from "../../hooks/useRenderCount";
 import AppNavbar from "./AppNavbar";
-import useRenderCount from "../../hooks/useRenderCount";
 
 const Layout = () => {
   const count = useRenderCount();

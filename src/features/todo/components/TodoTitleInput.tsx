@@ -1,22 +1,22 @@
-import React from "react";
-
-import { Todo } from "../service/todo.service";
+import React, { useCallback } from "react";
 
 interface TodoTitleInputProps {
-  editTodo: Todo | null;
+  title: string;
   onTodoTitleChange: (
-    event: React.ChangeEvent<HTMLInputElement>,
-    id: number
+    event: React.ChangeEvent<HTMLInputElement>
   ) => void;
 }
 
-const TodoTitleInput = ({
-  editTodo,
+const TodoTitleInputComponent = ({
+  title,
   onTodoTitleChange,
- }: TodoTitleInputProps) => {
-  if (!editTodo) {
-    return null;
-  }
+}: TodoTitleInputProps) => {
+  const memoizedTodoTitleChangeCallback = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      onTodoTitleChange(event);
+    },
+    [onTodoTitleChange]
+  );
 
   return (
     <input
@@ -24,10 +24,12 @@ const TodoTitleInput = ({
         width: "100%",
       }}
       type="text"
-      value={editTodo?.todo}
-      onChange={(event) => onTodoTitleChange(event, editTodo?.id)}
+      value={title}
+      onChange={memoizedTodoTitleChangeCallback}
     />
   );
 };
+
+const TodoTitleInput = React.memo(TodoTitleInputComponent);
 
 export default TodoTitleInput;
