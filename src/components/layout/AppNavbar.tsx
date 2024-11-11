@@ -1,7 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 
+import { useRenderCount } from "../../hooks/useRenderCount";
+
 const AppNavbar = () => {
   const navigate = useNavigate();
+
+  const renderCount = useRenderCount();
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -20,6 +24,7 @@ const AppNavbar = () => {
 
   return (
     <nav>
+      <h5>PageTitle render count: {renderCount}</h5>
       <ul>
         <li>
           <Link to="/" state={{ hello: "Hello, world!" }}>
