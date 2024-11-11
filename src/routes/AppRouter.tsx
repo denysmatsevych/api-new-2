@@ -4,7 +4,7 @@ import Layout from "../components/layout/Layout";
 import NotFoundPage from "../components/NotFoundPage";
 import LoginPage from "../features/auth/LoginPage";
 import HomePage from "../features/home/HomePage";
-import TodoPage from "../features/todo/components/TodoPage";
+import TodoPage from "../features/todo/TodoPage";
 import UsersPage from "../features/users/UsersPage";
 import ProtectedRoute from "./ProtectedRoute";
 import BookReviewsPage from "../features/books/components/BookReviewsPage";
@@ -17,7 +17,7 @@ const AppRouter = () => {
         <Route
           path="/"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["admin", "user"]}>
               <Layout />
             </ProtectedRoute>
           }
@@ -25,7 +25,7 @@ const AppRouter = () => {
           <Route
             index
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["admin", "user"]}>
                 <HomePage />
               </ProtectedRoute>
             }
@@ -33,7 +33,7 @@ const AppRouter = () => {
           <Route
             path="/todo"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["admin", "user"]}>
                 <TodoPage />
               </ProtectedRoute>
             }
@@ -41,7 +41,7 @@ const AppRouter = () => {
           <Route
             path="/books"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["admin", "user"]}>
                 <BookReviewsPage />
               </ProtectedRoute>
             }
@@ -49,7 +49,7 @@ const AppRouter = () => {
           <Route
             path="/users"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["admin"]}>
                 <UsersPage />
               </ProtectedRoute>
             }

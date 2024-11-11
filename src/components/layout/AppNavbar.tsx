@@ -1,7 +1,12 @@
+import { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const AppNavbar = () => {
+import { useRenderCount } from "../../hooks/useRenderCount";
+
+const AppNavbarComponent = () => {
   const navigate = useNavigate();
+
+  const renderCount = useRenderCount();
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -20,6 +25,7 @@ const AppNavbar = () => {
 
   return (
     <nav>
+      <h5>AppNavbarComponent count: {renderCount}</h5>
       <ul>
         <li>
           <Link to="/" state={{ hello: "Hello, world!" }}>
@@ -44,5 +50,7 @@ const AppNavbar = () => {
     </nav>
   );
 };
+
+const AppNavbar = memo(AppNavbarComponent);
 
 export default AppNavbar;
