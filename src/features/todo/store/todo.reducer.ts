@@ -1,7 +1,7 @@
 import { Todo } from "../service/todo.service";
 import { TodoAction, TodoActionTypes } from "./todo.actions";
 
-interface TodoState {
+export interface TodoState {
   todoList: Todo[];
 }
 

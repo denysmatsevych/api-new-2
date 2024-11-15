@@ -1,23 +1,25 @@
 import { ChangeEvent, memo, useCallback, useMemo, useState } from "react";
 
 import { useRenderCount } from "../../../../hooks/useRenderCount";
-import { Todo } from "../../service/todo.service";
+import { useTodoDispatchContext } from "../../hooks/useTodoTableContext";
 import TodoTitleInput from "../TodoTitleInput";
 
 interface TodoTableRowProps {
-  todo: Todo;
-  onTodoItemDelete: (id: number) => void;
-  onSaveTodoButtonClick: (todoTitle: string, id: number) => void;
+  todoId: number;
 }
 
-const TodoTableRowComponent = ({
-  todo,
-  onTodoItemDelete,
-  onSaveTodoButtonClick,
-}: TodoTableRowProps) => {
+const TodoTableRowComponent = ({ todoId }: TodoTableRowProps) => {
   const renderCount = useRenderCount();
 
-  const memoizedTodoTitleValue = useMemo(() => todo.todo, [todo.todo]);
+  const {
+    memoizedSaveTodoButtonClickCallback,
+    memoizedTodoItemDeleteButtonClickCallback,
+    memoizedGetTodoRowByIdCallback,
+  } = useTodoDispatchContext();
+
+  const todo = memoizedGetTodoRowByIdCallback(todoId);
+
+  const memoizedTodoTitleValue = useMemo(() => todo?.todo ?? "", [todo?.todo]);
 
   const [todoTitle, setTodoTitle] = useState(memoizedTodoTitleValue);
 
@@ -27,30 +29,33 @@ const TodoTableRowComponent = ({
     (event: ChangeEvent<HTMLInputElement>) => {
       setTodoTitle(event.target.value);
     },
-    [],
+    []
   );
 
-  const memoizedSetIsEditModeCallback = useCallback(
-    (isEdit: boolean) => {
-      setIsEditMode(isEdit);
-    },
-    [],
-  );
+  const memoizedSetIsEditModeCallback = useCallback((isEdit: boolean) => {
+    setIsEditMode(isEdit);
+  }, []);
 
-  const memoizedSaveTodoButtonClickCallback = useCallback(
-    () => {
-      onSaveTodoButtonClick(todoTitle, todo.id);
-      setIsEditMode(false);
-    },
-    [onSaveTodoButtonClick, todo.id, todoTitle],
-  );
+  const memoizedSaveTodoButtonClickHandlerCallback = useCallback(() => {
+    if (!todo) {
+      return;
+    }
 
-  const memoizedTodoItemDeleteCallback = useCallback(
-    () => {
-      onTodoItemDelete(todo.id);
-    },
-    [onTodoItemDelete, todo.id],
-  );
+    memoizedSaveTodoButtonClickCallback(todoTitle, todo.id);
+    setIsEditMode(false);
+  }, [memoizedSaveTodoButtonClickCallback, todo, todoTitle]);
+
+  const memoizedTodoItemDeleteCallback = useCallback(() => {
+    if (!todo) {
+      return;
+    }
+
+    memoizedTodoItemDeleteButtonClickCallback(todo.id);
+  }, [memoizedTodoItemDeleteButtonClickCallback, todo]);
+
+  if (!todo) {
+    return null;
+  }
 
   return (
     <tr key={todo.id}>
@@ -75,12 +80,18 @@ const TodoTableRowComponent = ({
           }}
         >
           {isEditMode ? (
-            <button onClick={memoizedSaveTodoButtonClickCallback}>Save</button>
+            <button onClick={memoizedSaveTodoButtonClickHandlerCallback}>
+              Save
+            </button>
           ) : (
-            <button onClick={() => memoizedSetIsEditModeCallback(true)}>Edit</button>
+            <button onClick={() => memoizedSetIsEditModeCallback(true)}>
+              Edit
+            </button>
           )}
           {isEditMode ? (
-            <button onClick={() => memoizedSetIsEditModeCallback(false)}>Cancel</button>
+            <button onClick={() => memoizedSetIsEditModeCallback(false)}>
+              Cancel
+            </button>
           ) : (
             <button onClick={memoizedTodoItemDeleteCallback}>Delete</button>
           )}
