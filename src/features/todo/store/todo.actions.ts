@@ -1,6 +1,13 @@
 import { Todo } from "../service/todo.service";
 
-type TodoPayloadTypes = Todo[] | Todo | number | { id: number; title: string };
+type TodoPayloadTypes =
+  | Todo[]
+  | Todo
+  | number
+  | boolean
+  | string
+  | { id: number; title: string }
+  | null;
 
 export interface TodoAction {
   type: TodoActionTypes;
@@ -13,6 +20,9 @@ export enum TodoActionTypes {
   DELETE_TODO = "DELETE_TODO",
   UPDATE_TODO_TITLE = "UPDATE_TODO_TITLE",
   SET_TODO_LIST = "SET_TODO_LIST",
+
+  SET_TODO_TABLE_LOADING = "SET_TODO_TABLE_LOADING",
+  SET_TODO_TABLE_ERROR = "SET_TODO_TABLE_ERROR",
 }
 
 export const addTodoAction = (todo: Todo): TodoAction => ({
@@ -41,4 +51,14 @@ export const updateTodoTitleAction = (
 export const setTodoListAction = (todos: Todo[]): TodoAction => ({
   type: TodoActionTypes.SET_TODO_LIST,
   payload: todos,
+});
+
+export const setTodoTableLoadingAction = (loading: boolean): TodoAction => ({
+  type: TodoActionTypes.SET_TODO_TABLE_LOADING,
+  payload: loading,
+});
+
+export const setTodoTableErrorAction = (error: string | null): TodoAction => ({
+  type: TodoActionTypes.SET_TODO_TABLE_ERROR,
+  payload: error,
 });

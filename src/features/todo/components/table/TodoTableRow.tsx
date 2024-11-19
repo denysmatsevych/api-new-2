@@ -1,21 +1,23 @@
 import { ChangeEvent, memo, useCallback, useMemo, useState } from "react";
 
 import { useRenderCount } from "../../../../hooks/useRenderCount";
+import { useTodoDispatchContext } from "../../hooks/useTodoTableContext";
 import { Todo } from "../../service/todo.service";
 import TodoTitleInput from "../TodoTitleInput";
 
 interface TodoTableRowProps {
   todo: Todo;
-  onTodoItemDelete: (id: number) => void;
-  onSaveTodoButtonClick: (todoTitle: string, id: number) => void;
 }
 
 const TodoTableRowComponent = ({
   todo,
-  onTodoItemDelete,
-  onSaveTodoButtonClick,
 }: TodoTableRowProps) => {
   const renderCount = useRenderCount();
+
+  const {
+    memoizedTodoItemDeleteButtonClickCallback,
+    memoizedSaveTodoButtonClickCallback,
+  } = useTodoDispatchContext();
 
   const memoizedTodoTitleValue = useMemo(() => todo.todo, [todo.todo]);
 
@@ -37,19 +39,19 @@ const TodoTableRowComponent = ({
     [],
   );
 
-  const memoizedSaveTodoButtonClickCallback = useCallback(
+  const memoizedSaveTodoButtonClickHandlerCallback = useCallback(
     () => {
-      onSaveTodoButtonClick(todoTitle, todo.id);
+      memoizedSaveTodoButtonClickCallback(todoTitle, todo.id);
       setIsEditMode(false);
     },
-    [onSaveTodoButtonClick, todo.id, todoTitle],
+    [memoizedSaveTodoButtonClickCallback, todo.id, todoTitle],
   );
 
   const memoizedTodoItemDeleteCallback = useCallback(
     () => {
-      onTodoItemDelete(todo.id);
+      memoizedTodoItemDeleteButtonClickCallback(todo.id);
     },
-    [onTodoItemDelete, todo.id],
+    [memoizedTodoItemDeleteButtonClickCallback, todo.id],
   );
 
   return (
@@ -75,7 +77,7 @@ const TodoTableRowComponent = ({
           }}
         >
           {isEditMode ? (
-            <button onClick={memoizedSaveTodoButtonClickCallback}>Save</button>
+            <button onClick={memoizedSaveTodoButtonClickHandlerCallback}>Save</button>
           ) : (
             <button onClick={() => memoizedSetIsEditModeCallback(true)}>Edit</button>
           )}

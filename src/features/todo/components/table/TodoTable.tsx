@@ -1,21 +1,15 @@
 import { memo } from "react";
 
 import { useRenderCount } from "../../../../hooks/useRenderCount";
-import { Todo } from "../../service/todo.service";
+import { useTodoContext } from "../../hooks/useTodoTableContext";
 import TodoTableRow from "./TodoTableRow";
 
-interface TodoTableProps {
-  todoList: Todo[];
-  onTodoItemDelete: (id: number) => void;
-  onSaveTodoButtonClick: (todoTitle: string, id: number) => void;
-}
-
-const TodoTableComponent = ({
-  todoList,
-  onTodoItemDelete,
-  onSaveTodoButtonClick,
-}: TodoTableProps) => {
+const TodoTableComponent = () => {
   const renderCount = useRenderCount();
+
+  const {
+    todoList
+  } = useTodoContext();
 
   return (
     <>
@@ -36,8 +30,6 @@ const TodoTableComponent = ({
             <TodoTableRow
               key={todo.id}
               todo={todo}
-              onTodoItemDelete={onTodoItemDelete}
-              onSaveTodoButtonClick={onSaveTodoButtonClick}
             />
           ))}
         </tbody>

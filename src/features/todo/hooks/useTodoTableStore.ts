@@ -1,5 +1,5 @@
 // React imports
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 
 // External (3rd-party) imports
 import { AxiosError } from "axios";
@@ -9,15 +9,14 @@ import { TodoService } from "../service/todo.service";
 import {
   deleteTodoAction,
   setTodoListAction,
+  setTodoTableErrorAction,
+  setTodoTableLoadingAction,
   updateTodoTitleAction,
 } from "../store/todo.actions";
 import { initialTodoState, todoReducer } from "../store/todo.reducer";
 
 export const useTodoTableStore = () => {
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -27,20 +26,20 @@ export const useTodoTableStore = () => {
 
     const todoService = new TodoService(signal);
 
+    dispatch(setTodoTableLoadingAction(true));
+    dispatch(setTodoTableErrorAction(null));
+
     const fetchTodos = async () => {
       try {
-        setLoading(true);
-        setError(null);
-
         const response = await todoService.getPaginatedTodos(1000, 0);
 
         if (isMounted) {
           dispatch(setTodoListAction(response.todos));
         }
       } catch (error) {
-        setError((error as AxiosError).message);
+        dispatch(setTodoTableErrorAction((error as AxiosError).message));
       } finally {
-        setLoading(false);
+        dispatch(setTodoTableLoadingAction(false));
       }
     };
 
@@ -55,16 +54,16 @@ export const useTodoTableStore = () => {
   const memoizedTodoItemDeleteButtonClickCallback = useCallback(
     async (id: number) => {
       try {
-        setLoading(true);
+        dispatch(setTodoTableLoadingAction(true));
 
         await new TodoService().deleteTodoById(id);
 
         dispatch(deleteTodoAction(id));
 
-        setLoading(false);
+        dispatch(setTodoTableLoadingAction(false));
       } catch (error) {
-        setError((error as AxiosError).message);
-        setLoading(false);
+        dispatch(setTodoTableErrorAction((error as AxiosError).message));
+        dispatch(setTodoTableLoadingAction(false));
       }
     },
     []
@@ -83,7 +82,7 @@ export const useTodoTableStore = () => {
 
         dispatch(updateTodoTitleAction(id, todoTitle));
       } catch (error) {
-        setError((error as AxiosError).message);
+        dispatch(setTodoTableErrorAction((error as AxiosError).message));
       }
     },
     []
@@ -91,8 +90,8 @@ export const useTodoTableStore = () => {
 
   return {
     todoList: state.todoList,
-    loading,
-    error,
+    loading: state.loading,
+    error: state.error,
     memoizedTodoItemDeleteButtonClickCallback,
     memoizedSaveTodoButtonClickCallback,
   };

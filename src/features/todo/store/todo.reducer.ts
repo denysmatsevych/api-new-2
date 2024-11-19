@@ -1,11 +1,15 @@
 import { Todo } from "../service/todo.service";
 import { TodoAction, TodoActionTypes } from "./todo.actions";
 
-interface TodoState {
+export interface TodoState {
+  error: string | null;
+  loading: boolean;
   todoList: Todo[];
 }
 
 export const initialTodoState: TodoState = {
+  error: null,
+  loading: false,
   todoList: [],
 };
 
@@ -54,6 +58,18 @@ export const todoReducer = (
             ? { ...todo, completed: !todo.completed }
             : todo
         ),
+      };
+    }
+    case TodoActionTypes.SET_TODO_TABLE_LOADING: {
+      return {
+        ...state,
+        loading: action.payload as boolean,
+      };
+    }
+    case TodoActionTypes.SET_TODO_TABLE_ERROR: {
+      return {
+        ...state,
+        error: action.payload as string,
       };
     }
     default:
