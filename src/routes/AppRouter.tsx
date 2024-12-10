@@ -2,12 +2,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Layout from "../components/layout/Layout";
 import NotFoundPage from "../components/NotFoundPage";
+import UnauthorizedPage from "../components/UnauthorizedPage";
 import LoginPage from "../features/auth/LoginPage";
+import BookReviewsPage from "../features/books/components/BookReviewsPage";
 import HomePage from "../features/home/HomePage";
 import TodoPage from "../features/todo/TodoPage";
 import UsersPage from "../features/users/UsersPage";
 import ProtectedRoute from "./ProtectedRoute";
-import BookReviewsPage from "../features/books/components/BookReviewsPage";
 
 const AppRouter = () => {
   return (
@@ -55,6 +56,7 @@ const AppRouter = () => {
             }
           />
         </Route>
+        <Route path="/unauthorized" element={<UnauthorizedPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
